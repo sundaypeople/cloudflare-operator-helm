@@ -25,7 +25,7 @@ jobs:
           # feature-branch を main ブランチへマージする PR を作成
           PR_URL=$(gh pr create \
             --base main \
-            --head feature-branch \
+            --head actions \
             --title "Auto PR: feature-branch の変更反映" \
             --body "このプルリクエストは GitHub Actions により自動生成されました。")
           echo "PR_URL=${PR_URL}"
