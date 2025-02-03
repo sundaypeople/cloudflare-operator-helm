@@ -33,20 +33,13 @@ jobs:
         with:
           tag_prefix: ""
 
-      - run: yq eval '.version = "${{ steps.version.outputs.version_tag }}"' -i charts/Chart.yaml
-
       - name: Create a tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Create a GitHub release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
+
+      - run: yq eval '.version = "${{ steps.tag_version.outputs.new_tag }}"' -i charts/Chart.yaml
 
       - name: Install Helm
         uses: azure/setup-helm@v1
