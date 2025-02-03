@@ -37,4 +37,4 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # --auto オプションを指定することで、自動マージ（マージ条件がクリアになったら自動でマージキューに入る）
-          gh pr merge ${{ steps.create_pr.outputs.pr_url }} --auto --merge
+          gh pr merge ${{ steps.create_pr.outputs.pr_url }} --merge
