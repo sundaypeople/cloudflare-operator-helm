@@ -3,7 +3,7 @@ name: Auto PR Creation and Merge with gh
 on:
   push:
     branches:
-      - feature-branch   # 変更があるブランチ名を指定
+      - actions   # 変更があるブランチ名を指定
 
 jobs:
   auto-pr-merge:
