@@ -1,0 +1,45 @@
+name: Auto PR Creation and Merge
+
+on:
+  push:
+    branches:
+      - actions
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Create Pull Request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: auto-pr-branch      # 自動生成するPR用の一時ブランチ名
+          base: main                  # マージ先のブランチ
+          title: "自動生成 PR: feature-branch の変更反映"
+          body: |
+            このプルリクエストは GitHub Actions により自動生成されました。
+            条件が整えば自動マージされます。
+
+      - name: Approve PR (Optional)
+        if: steps.create_pr.outputs.pull-request-number != ''
+        run: |
+          gh pr review ${{ steps.create_pr.outputs.pull-request-number }} --approve
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge Pull Request Automatically
+        if: steps.create_pr.outputs.pull-request-number != ''
+        run: |
+          # auto-merge を有効にしてマージキューに入れる
+          gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} --auto --merge
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
