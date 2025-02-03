@@ -31,12 +31,6 @@ jobs:
           echo "PR_URL=${PR_URL}"
           echo "::set-output name=pr_url::${PR_URL}"
 
-      - name: Approve Pull Request (if required)
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # ブランチ保護ルールで承認が必要な場合、PR を自動承認
-          gh pr review ${{ steps.create_pr.outputs.pr_url }} --approve
 
       - name: Enable Auto Merge using gh
         env:
