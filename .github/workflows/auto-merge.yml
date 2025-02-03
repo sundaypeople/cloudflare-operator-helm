@@ -1,45 +1,46 @@
-name: Auto PR Creation and Merge
+name: Auto PR Creation and Merge with gh
 
 on:
   push:
     branches:
-      - actions
+      - feature-branch   # 変更があるブランチ名を指定
 
 jobs:
-  create-pr:
+  auto-pr-merge:
     runs-on: ubuntu-latest
     permissions:
-      pull-requests: write
       contents: write
+      pull-requests: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Create Pull Request
+      - name: Create Pull Request using gh
         id: create_pr
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: auto-pr-branch      # 自動生成するPR用の一時ブランチ名
-          base: main                  # マージ先のブランチ
-          title: "自動生成 PR: feature-branch の変更反映"
-          body: |
-            このプルリクエストは GitHub Actions により自動生成されました。
-            条件が整えば自動マージされます。
-
-      - name: Approve PR (Optional)
-        if: steps.create_pr.outputs.pull-request-number != ''
-        run: |
-          gh pr review ${{ steps.create_pr.outputs.pull-request-number }} --approve
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Merge Pull Request Automatically
-        if: steps.create_pr.outputs.pull-request-number != ''
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # auto-merge を有効にしてマージキューに入れる
-          gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} --auto --merge
+          # feature-branch を main ブランチへマージする PR を作成
+          PR_URL=$(gh pr create \
+            --base main \
+            --head feature-branch \
+            --title "Auto PR: feature-branch の変更反映" \
+            --body "このプルリクエストは GitHub Actions により自動生成されました。")
+          echo "PR_URL=${PR_URL}"
+          echo "::set-output name=pr_url::${PR_URL}"
+
+      - name: Approve Pull Request (if required)
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # ブランチ保護ルールで承認が必要な場合、PR を自動承認
+          gh pr review ${{ steps.create_pr.outputs.pr_url }} --approve
+
+      - name: Enable Auto Merge using gh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # --auto オプションを指定することで、自動マージ（マージ条件がクリアになったら自動でマージキューに入る）
+          gh pr merge ${{ steps.create_pr.outputs.pr_url }} --auto --merge
