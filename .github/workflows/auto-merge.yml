@@ -1,0 +1,48 @@
+name: Auto PR Creation and Merge with gh
+
+on:
+  push:
+    branches:
+      - actions   # 変更があるブランチ名を指定
+
+jobs:
+  auto-pr-merge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - id: create
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.create.outputs.token }} 
+
+
+      - name: Create Pull Request using gh
+        id: create_pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # feature-branch を main ブランチへマージする PR を作成
+          PR_URL=$(gh pr create \
+            --base main \
+            --head actions \
+            --title "Auto PR: feature-branch の変更反映" \
+            --body "このプルリクエストは GitHub Actions により自動生成されました。")
+          echo "PR_URL=${PR_URL}"
+          echo "::set-output name=pr_url::${PR_URL}"
+
+
+      # - name: Enable Auto Merge using gh
+      #   env:
+      #     GH_TOKEN: ${{ steps.create.outputs.token }}
+      #   run: |
+      #     # --auto オプションを指定することで、自動マージ（マージ条件がクリアになったら自動でマージキューに入る）
+      #     gh pr merge ${{ steps.create_pr.outputs.pr_url }} --merge
