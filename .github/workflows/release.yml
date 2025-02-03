@@ -31,10 +31,7 @@ jobs:
         id: version
         uses: paulhatch/semantic-version@v5.4.0
 
-      - uses: mikefarah/yq@master
-        with:
-          cmd: yq eval '.version = ${{ steps.version.outputs.version_tag }}' -i charts/Chart.yaml
-
+      - run: yq eval '.version = ${{ steps.version.outputs.version_tag }}' -i charts/Chart.yaml
 
       - name: Install Helm
         uses: azure/setup-helm@v1
