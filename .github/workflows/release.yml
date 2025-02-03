@@ -34,7 +34,7 @@ jobs:
           tag_prefix: ""
 
 
-      - run: yq eval '.version = ${{ steps.version.outputs.version_tag }}' -i charts/Chart.yaml
+      - run: yq eval '.version = "${{ steps.version.outputs.version_tag }}"' -i charts/Chart.yaml
 
       - name: Install Helm
         uses: azure/setup-helm@v1
