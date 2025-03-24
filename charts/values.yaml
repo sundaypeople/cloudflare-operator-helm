@@ -3,7 +3,7 @@ controllerManager:
   replicas: 1
   container:
     image:
-      repository: /cloudflare-controller:v0.1.26
+      repository: /cloudflare-controller:v0.7.0
       tag: latest
     args:
       - "--leader-elect"
