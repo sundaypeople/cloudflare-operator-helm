@@ -3,8 +3,8 @@ controllerManager:
   replicas: 1
   container:
     image:
-      repository: /cloudflare-controller:v0.9.0
-      tag: latest
+      repository: soyokaze0125/cloudflare-operator:v0.1.0
+      tag: v0.10.0
     args:
       - "--leader-elect"
       - "--metrics-bind-address=:8443"
