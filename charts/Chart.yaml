@@ -2,6 +2,6 @@ apiVersion: v2
 name: cloudflared-operator
 description: A Helm chart to distribute the project cloudflared-operator
 type: application
-version: 0.1.0
+version: v0.0.8
 appVersion: "v0.16.0"
 icon: "https://example.com/icon.png"
