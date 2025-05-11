@@ -4,7 +4,7 @@ controllerManager:
   container:
     image:
       repository: sundaypeople/cloudflare-controller
-      tag: v0.12.0
+      tag: v0.16.0
     args:
       - "--leader-elect"
       - "--metrics-bind-address=:8443"
