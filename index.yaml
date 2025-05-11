@@ -2,6 +2,17 @@ apiVersion: v1
 entries:
   cloudflared-operator:
   - apiVersion: v2
+    appVersion: v0.16.0
+    created: "2025-05-11T07:11:48.087114344Z"
+    description: A Helm chart to distribute the project cloudflared-operator
+    digest: 8119c4607a77aa81f31cdaa0af8a0bced5da64ec283764e3e53095df3cf10b78
+    icon: https://example.com/icon.png
+    name: cloudflared-operator
+    type: application
+    urls:
+    - https://github.com/sundaypeople/cloudflare-operator-helm/releases/download/cloudflared-operator-v0.0.8/cloudflared-operator-v0.0.8.tgz
+    version: v0.0.8
+  - apiVersion: v2
     appVersion: v0.10.0
     created: "2025-05-11T06:24:46.160700226Z"
     description: A Helm chart to distribute the project cloudflared-operator
@@ -56,4 +67,4 @@ entries:
     urls:
     - https://github.com/LainInTheWired/cloudflare-operator-helm/releases/download/cloudflared-operator-v0.0.3/cloudflared-operator-v0.0.3.tgz
     version: v0.0.3
-generated: "2025-05-11T06:24:46.160725874Z"
+generated: "2025-05-11T07:11:48.087140523Z"
