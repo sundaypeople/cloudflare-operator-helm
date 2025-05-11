@@ -3,8 +3,8 @@ controllerManager:
   replicas: 1
   container:
     image:
-      repository: sundaypeople/cloudflare-controller
-      tag: v0.16.0
+      repository: /cloudflare-controller
+      tag: v0.17.0
     args:
       - "--leader-elect"
       - "--metrics-bind-address=:8443"
